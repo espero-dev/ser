@@ -1,0 +1,11 @@
+#import <CSS/CSSRule.idl>
+#import <CSS/CSSStyleDeclaration.idl>
+
+// https://drafts.csswg.org/cssom/#the-cssstylerule-interface
+[Exposed=Window]
+interface CSSStyleRule : CSSRule {
+
+    attribute CSSOMString selectorText;
+    [SameObject, PutForwards=cssText] readonly attribute CSSStyleDeclaration style;
+
+};

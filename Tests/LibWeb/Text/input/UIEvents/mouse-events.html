@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<style>
+body {
+    margin: 0px;
+    padding: 5px;
+    width: 200px;
+    height: 200px;
+}
+
+#outer {
+    width: 100px;
+    height: 100px;
+    background-color: yellowgreen;
+}
+
+#inner {
+    width: 50px;
+    height: 50px;
+    background-color: magenta;
+}
+</style>
+<body id="body"><div id="outer"><div id="inner"></div></div></body>
+<script src="../include.js"></script>
+<script>
+function handleMouseOver(e) {
+    println(`mouseover target.id=(${e.target.id}) currentTarget.id=(${e.currentTarget.id}), relatedTarget.id=(${e.relatedTarget.id})`);
+}
+function handleMouseOut(e) {
+    println(`mouseout target.id=(${e.target.id}) currentTarget.id=(${e.currentTarget.id}), relatedTarget.id=(${e.relatedTarget.id})`);
+}
+function handleMouseEnter(e) {
+    println(`mouseenter target.id=(${e.target.id}) currentTarget.id=(${e.currentTarget.id}), relatedTarget.id=(${e.relatedTarget.id})`);
+}
+function handleMouseLeave(e) {
+    println(`mouseleave target.id=(${e.target.id}) currentTarget.id=(${e.currentTarget.id}), relatedTarget.id=(${e.relatedTarget.id})`);
+}
+
+
+outer.onmouseover = handleMouseOver;
+outer.onmouseout = handleMouseOut;
+outer.onmouseenter = handleMouseEnter;
+outer.onmouseleave = handleMouseLeave;
+
+inner.onmouseover = handleMouseOver;
+inner.onmouseout = handleMouseOut;
+inner.onmouseenter = handleMouseEnter;
+inner.onmouseleave = handleMouseLeave;
+
+const clickOnBody = () => {
+    return new Promise(resolve => {
+        document.body.onclick = () => { resolve(); };
+        internals.click(1, 1);
+    });
+}
+
+asyncTest(async done => {
+    // First move the mouse outside #outer to populate the MouseEvent.relatedTarget property
+    internals.movePointerTo(150, 150);
+    println("> move pointer over #inner");
+    internals.movePointerTo(10, 10);
+    println("> move pointer over #outer");
+    internals.movePointerTo(60, 60);
+    println("> click document.body");
+    await clickOnBody();
+    done();
+});
+</script>
